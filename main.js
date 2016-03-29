@@ -63,7 +63,10 @@ $('#decPlace').click(function (){
 //Sign button clicks
 $('#addSign').click(function (){
 	nullCheck();
-	checkLast();
+	if (checkLast() == true)
+		{
+			delLast();
+		}
 	newMath();
 	var keyEntered = '+';			//prints a + to the display area when + 
 	setVal(keyEntered);				//key is clicked
@@ -72,7 +75,10 @@ $('#addSign').click(function (){
 
 $('#subSign').click(function (){
 	nullCheck();
-	checkLast();
+	if (checkLast() == true)
+		{
+			delLast();
+		}
 	newMath();
 	var keyEntered = '-';			//prints a - to the display area when - 
 	setVal(keyEntered);				//key is clicked
@@ -81,22 +87,59 @@ $('#subSign').click(function (){
 
 $('#mulSign').click(function (){
 	nullCheck();
-	checkLast();
+	if (checkLast() == true)
+		{
+			delLast();
+		}
 	newMath();
 	var keyEntered = '*';			//prints a * to the display area when * 
 	setVal(keyEntered);				//key is clicked
-	
 });
 
 $('#divSign').click(function (){
 	nullCheck();
-	checkLast();
+	if (checkLast() == true)
+		{
+			delLast();
+		}
 	newMath();
 	var keyEntered = '/';			//prints a / to the display area when / 
 	setVal(keyEntered);				//key is clicked
-	
 });
 
+//Backspace button click
+$('#backspace').click(function (){	//deletes the last character entered from display
+	delLast();
+});
+
+//Clear button click
+$('#clear').click(function () {		//clears the display
+	clrDisp();
+});
+
+//Clear Entry button click
+$('#clearEnt').click(function () {	//clears the display (in the future this should
+	clrDisp();						//only clear the current entry)
+});
+
+//Square Root button click
+$('#sqrt').click(function () {
+	if (checkLast() == true)
+		{
+			delLast();
+		}
+	dispArea.value = Math.sqrt(dispArea.value);
+});
+
+//Reciprocal button click
+$('#recip').click(function() {
+	dispArea.value = (1 / (dispArea.value));
+});
+
+//Negate button click
+$('#plusMinus').click(function() {
+	dispArea.value = (dispArea.value * -1);
+});
 
 //Equal sign click
 $('#equalSign').click(function () {
@@ -126,17 +169,17 @@ function nullCheck() {
 
 function checkLast() {
 	x = dispArea.value.length;
-	if (dispArea.value.charAt(x-1) === '+') {
-		delLast();									//Checks to see if the 
+	if (dispArea.value.charAt(x-1) === '+') {		
+		return true									//Checks to see if the 
 	}												//last character entered
 	else if (dispArea.value.charAt(x-1) === '-') {	//was a sign character
-		delLast();									//If yes, calls delLast
+		return true									//If yes, calls delLast
 	}												//so old sign char is 
 	else if (dispArea.value.charAt(x-1) === '*') {	//replaced with new one
-		delLast();									//If last character is not
+		return true									//If last character is not
 	}												//a sign character, returns
 	else if (dispArea.value.charAt(x-1) === '/') {	//false
-		delLast();
+		return true
 	}
 	else {
 		return false
@@ -178,12 +221,17 @@ function addSignCheck() {
 	}
 }
 
+//checks if string contains a minus sign. returns true if it does and
+//false if it doesn't (return false if it contains a negative sign, but no minus sign)
 function minusSignCheck() {
 	if (dispArea.value.indexOf('-') === -1) {
-		return false						//checks if string contains
-	}										//a minus sign
-	else {									//returns true if it does and 
-		return true							//false if it doesn't
+		return false						
+	}	
+	else if ((dispArea.value.split('-').length-1 == 1) && (dispArea.value.indexOf('-') === 0)) {
+		return false
+	}							
+	else {											
+		return true							
 	}	
 }
 
@@ -254,6 +302,10 @@ function evalExp() {
 	return ans;
 }
 
+function clrDisp() {
+	dispArea.value = "";					//Clears the display area
+}
+
 
 //Calculator Styling
 $('#green').click(function (){
@@ -266,9 +318,12 @@ $('#green').click(function (){
 	document.getElementById('divSign').className = 'grnSignButton';
 	document.getElementById('percentSign').className = 'grnSignButton';
 	document.getElementById('mulSign').className = 'grnSignButton';
-	document.getElementById('fraction').className = 'grnSignButton';
+	document.getElementById('recip').className = 'grnSignButton';
 	document.getElementById('subSign').className = 'grnSignButton';
 	document.getElementById('addSign').className = 'grnSignButton';
+	
+	document.getElementById('numZero').className = 'grnZeroButton';
+	document.getElementById('equalSign').className = 'grnEqualButton';
 	
 	document.getElementById('decPlace').className = 'grnNumButton';
 	document.getElementById('numOne').className = 'grnNumButton';
@@ -292,9 +347,12 @@ $('#purple').click(function (){
 	document.getElementById('divSign').className = 'purSignButton';
 	document.getElementById('percentSign').className = 'purSignButton';
 	document.getElementById('mulSign').className = 'purSignButton';
-	document.getElementById('fraction').className = 'purSignButton';
+	document.getElementById('recip').className = 'purSignButton';
 	document.getElementById('subSign').className = 'purSignButton';
 	document.getElementById('addSign').className = 'purSignButton';
+	
+	document.getElementById('numZero').className = 'purZeroButton';
+	document.getElementById('equalSign').className = 'purEqualButton';
 	
 	document.getElementById('decPlace').className = 'purNumButton';
 	document.getElementById('numOne').className = 'purNumButton';
@@ -318,9 +376,12 @@ $('#red').click(function (){
 	document.getElementById('divSign').className = 'redSignButton';
 	document.getElementById('percentSign').className = 'redSignButton';
 	document.getElementById('mulSign').className = 'redSignButton';
-	document.getElementById('fraction').className = 'redSignButton';
+	document.getElementById('recip').className = 'redSignButton';
 	document.getElementById('subSign').className = 'redSignButton';
 	document.getElementById('addSign').className = 'redSignButton';
+	
+	document.getElementById('numZero').className = 'redZeroButton';
+	document.getElementById('equalSign').className = 'redEqualButton';
 	
 	document.getElementById('decPlace').className = 'redNumButton';
 	document.getElementById('numOne').className = 'redNumButton';
@@ -344,9 +405,12 @@ $('#blue').click(function (){
 	document.getElementById('divSign').className = 'blueSignButton';
 	document.getElementById('percentSign').className = 'blueSignButton';
 	document.getElementById('mulSign').className = 'blueSignButton';
-	document.getElementById('fraction').className = 'blueSignButton';
+	document.getElementById('recip').className = 'blueSignButton';
 	document.getElementById('subSign').className = 'blueSignButton';
 	document.getElementById('addSign').className = 'blueSignButton';
+	
+	document.getElementById('numZero').className = 'blueZeroButton';
+	document.getElementById('equalSign').className = 'blueEqualButton';
 	
 	document.getElementById('decPlace').className = 'blueNumButton';
 	document.getElementById('numOne').className = 'blueNumButton';
@@ -370,9 +434,12 @@ $('#yellow').click(function (){
 	document.getElementById('divSign').className = 'yelSignButton';
 	document.getElementById('percentSign').className = 'yelSignButton';
 	document.getElementById('mulSign').className = 'yelSignButton';
-	document.getElementById('fraction').className = 'yelSignButton';
+	document.getElementById('recip').className = 'yelSignButton';
 	document.getElementById('subSign').className = 'yelSignButton';
 	document.getElementById('addSign').className = 'yelSignButton';
+	
+	document.getElementById('numZero').className = 'yelZeroButton';
+	document.getElementById('equalSign').className = 'yelEqualButton';
 	
 	document.getElementById('decPlace').className = 'yelNumButton';
 	document.getElementById('numOne').className = 'yelNumButton';
@@ -396,9 +463,12 @@ $('#orange').click(function (){
 	document.getElementById('divSign').className = 'ornSignButton';
 	document.getElementById('percentSign').className = 'ornSignButton';
 	document.getElementById('mulSign').className = 'ornSignButton';
-	document.getElementById('fraction').className = 'ornSignButton';
+	document.getElementById('recip').className = 'ornSignButton';
 	document.getElementById('subSign').className = 'ornSignButton';
 	document.getElementById('addSign').className = 'ornSignButton';
+	
+	document.getElementById('numZero').className = 'ornZeroButton';
+	document.getElementById('equalSign').className = 'ornEqualButton';
 	
 	document.getElementById('decPlace').className = 'ornNumButton';
 	document.getElementById('numOne').className = 'ornNumButton';
